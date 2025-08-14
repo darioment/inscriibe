@@ -50,7 +50,7 @@ if(isset($_POST["nombre"])){
       echo "Formato de fecha tutor incorrecto.";
   }
 
-  if(!file_exists('docs/'.$nombre)){
+  if(!file_exists('docs_himno/'.$nombre)){
     $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('inscribe.docx');
     $templateProcessor->setValue('apellido1', $_POST["apellido1"]);
     $templateProcessor->setValue('apellido2',$_POST["apellido2"]);
@@ -144,15 +144,15 @@ if(isset($_POST["nombre"])){
     $templateProcessor->setValue('apoyo',$_POST["apoyo"]);
     $templateProcessor->setValue('indigena', $_POST["indigena"]);    
 
-    $templateProcessor->saveAs('docs/'.$nombre);
+    $templateProcessor->saveAs('docs_himno/'.$nombre);
   }
 
 
   // guarda datos
-  $servername = "localhost";
-  $username = "escuelasec98";
-  $password = "mySEC98";
-  $dbname = "escuelasec98";
+  $servername = "evolution.usoreal.com";
+  $username = "mysql";
+  $password = "dment25MY!.";
+  $dbname = "sec";
   
   // Crear una conexión
   $conn = new mysqli($servername, $username, $password, $dbname);
@@ -167,7 +167,7 @@ if(isset($_POST["nombre"])){
       die("Conexión fallida: " . $conn->connect_error);
   }
 
-  $query = "INSERT INTO formato_98 (apellido1, apellido2, nombre, dia, mes, anio, edad, edadmes, sexo, curp, peso, talla, lentes, zapatos, cartilla, vacunas, nacionalidad, entidadnac, serviciomed, calle, entrecalle1, entrecalle2, numext, numint, manzana, lote, depto, colonia, cp, localidad, municipio, referencia, entidad, telcasa, telcel, correo1, correo2, hermanos, redsocial, tipored, gradoherm, grupoherm, parentesco, apellido1herm, apellido2herm, nombreherm, diapa, mespa, aniopa, edadpa, edadmespa, sexopa, curppa, civil, estudios, laboral, nacionalidadpa, entidadnacpa, documento, callepa, calle1pa, calle2pa, numextpa, numintpa, manzanapa, lotepa, deptopa, coloniapa, cppa, localidadpa, municipiopa, referenciapa, entidadpa, telcasapa, telcelpa, correo1pa, correo2pa, apellido1pa, apellido2pa, nombrepa, especial, apoyo, indigena,grado,grupo) 
+  $query = "INSERT INTO ins_himno (apellido1, apellido2, nombre, dia, mes, anio, edad, edadmes, sexo, curp, peso, talla, lentes, zapatos, cartilla, vacunas, nacionalidad, entidadnac, serviciomed, calle, entrecalle1, entrecalle2, numext, numint, manzana, lote, depto, colonia, cp, localidad, municipio, referencia, entidad, telcasa, telcel, correo1, correo2, hermanos, redsocial, tipored, gradoherm, grupoherm, parentesco, apellido1herm, apellido2herm, nombreherm, diapa, mespa, aniopa, edadpa, edadmespa, sexopa, curppa, civil, estudios, laboral, nacionalidadpa, entidadnacpa, documento, callepa, calle1pa, calle2pa, numextpa, numintpa, manzanapa, lotepa, deptopa, coloniapa, cppa, localidadpa, municipiopa, referenciapa, entidadpa, telcasapa, telcelpa, correo1pa, correo2pa, apellido1pa, apellido2pa, nombrepa, especial, apoyo, indigena,grado,grupo) 
   VALUES ('".$_POST["apellido1"]."','".$_POST["apellido2"]."','".$_POST["nombre"]."',".$dianac.",".$mesnac.",".$anionac.",".$edad.",".$edadmes.",'".$_POST["sexo"]."','".$_POST["curp"]."','".$_POST["peso"]."','".$_POST["talla"]."','".$_POST["lentes"]."','".$_POST["zapatos"]."','".$_POST["cartilla"]."','".$_POST["vacunas"]."','".$_POST["nacionalidad"]."','".$_POST["entidadnac"]."','".$_POST["serviciomed"]."','".$_POST["calle"]."','".$_POST["entrecalle1"]."','".$_POST["entrecalle2"]."','".$_POST["numext"]."','".$_POST["numint"]."','".$_POST["manzana"]."','".$_POST["lote"]."','".$_POST["depto"]."','".$_POST["colonia"]."','".$_POST["cp"]."','".$_POST["localidad"]."','".$_POST["municipio"]."','".$_POST["referencia"]."','".$_POST["entidad"]."','".$_POST["telcasa"]."','".$_POST["telcel"]."','".$_POST["correo1"]."','".$_POST["correo2"]."','".$_POST["hermanos"]."','".$_POST["redsocial"]."','".$_POST["tipored"]."','".$_POST["gradoherm"]."','".$_POST["grupoherm"]."','".$_POST["parentesco"]."','".$_POST["apellido1herm"]."','".$_POST["apellido2herm"]."','".$_POST["nombreherm"]."',".$dianacpa.",".$mesnacpa.",".$anionacpa.",".$edadpa.",".$edadmespa.",'".$_POST["sexopa"]."','".$_POST["curppa"]."','".$_POST["civil"]."','".$_POST["estudios"]."','".$_POST["laboral"]."','".$_POST["nacionalidadpa"]."','".$_POST["entidadnacpa"]."','".$_POST["documento"]."','".$_POST["callepa"]."','".$_POST["calle1pa"]."','".$_POST["calle2pa"]."','".$_POST["numextpa"]."','".$_POST["numintpa"]."','".$_POST["manzanapa"]."','".$_POST["lotepa"]."','".$_POST["deptopa"]."','".$_POST["coloniapa"]."','".$_POST["cppa"]."','".$_POST["localidadpa"]."','".$_POST["municipiopa"]."','".$_POST["referenciapa"]."','".$_POST["entidadpa"]."','".$_POST["telcasapa"]."','".$_POST["telcelpa"]."','".$_POST["correo1pa"]."','".$_POST["correo2pa"]."','".$_POST["apellido1pa"]."','".$_POST["apellido2pa"]."','".$_POST["nombrepa"]."','".$_POST["especial"]."','".$_POST["apoyo"]."','".$_POST["indigena"]."','".$_POST["grado"]."','".$_POST["grupo"]."')";
   
   if ($conn->query($query) === TRUE) {
@@ -181,10 +181,13 @@ if(isset($_POST["nombre"])){
 
   echo '<hr>
   <h1>
-  Da click en las letras azules para descargar e imprimir tu formato de inscripción <hr> <a href="docs/'.$nombre.'"><img src=manita.png width=60 height=60>'.$nombre.'</a> <br>y lleválo impreso el día de la inscripción a la escuela
+  Da click en las letras azules para descargar e imprimir tu formato de inscripción 
+  <hr> <a href="docs_himno/'.$nombre.'"><img src=manita.png width=60 height=60>'.$nombre.'</a> 
+  <br>y lleválo impreso el día de la inscripción a la escuela junto con este otro documento:
+  <br><a href="docs_himno/aec_inscripcion_h.docx"><img src=manita.png width=60 height=60>ACUERDO ESCOLAR DE CONVIVENCIA (AEC)</a> 
   </h1>
   <hr>
-  <button id="regresarButton" onclick="window.history.back();">Regresar</button>
+  
 
   ';
   die();
@@ -276,7 +279,7 @@ if(isset($_POST["nombre"])){
               <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                 <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                   <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                  <li class="breadcrumb-item"><a href="#">Escuela Secundario "Moises Saenz" No. 98</a></li>
+                  <li class="breadcrumb-item"><a href="#">Escuela Secundario HIMNO NACIONAL</a></li>
                   <li class="breadcrumb-item active" aria-current="page">Inscripción</li>
                 </ol>
               </nav>
@@ -1281,7 +1284,7 @@ if(isset($_POST["nombre"])){
         <div class="row align-items-center justify-content-lg-between">
           <div class="col-lg-6">
             <div class="copyright text-center text-lg-left text-muted">
-              &copy; 2024 Escuela Secundaria "Moises Saenz" No. 98
+              &copy; 2025 Escuela Secundaria HIMNO NACIONAL
             </div>
           </div>
 
