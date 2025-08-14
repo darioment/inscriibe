@@ -50,6 +50,28 @@ if(isset($_POST["nombre"])){
       echo "Formato de fecha tutor incorrecto.";
   }
 
+  // Procesamiento de fecha para segundo tutor
+  $fechanacpa2 = $_POST["fechanacpa2"];
+  $dateParts2 = explode("/", $fechanacpa2);
+
+  if (count($dateParts2) === 3) {
+      $dianacpa2 = $dateParts2[1];
+      $mesnacpa2 = $dateParts2[0];
+      $anionacpa2 = substr($dateParts2[2], -2); // Extraer los últimos dos dígitos del año
+
+      $fechaActualpa2 = date("m/d/Y"); // Obtenemos la fecha actual en el mismo formato
+      
+      $fechaNacimientoObjpa2 = DateTime::createFromFormat("m/d/Y", $fechanacpa2);
+      $fechaActualObjpa2 = DateTime::createFromFormat("m/d/Y", $fechaActualpa2);
+      
+      $diffpa2 = $fechaNacimientoObjpa2->diff($fechaActualObjpa2);
+      
+      $edadpa2 = $diffpa2->y;
+      $edadmespa2 = $diffpa2->m;      
+  } else {
+      echo "Formato de fecha segundo tutor incorrecto.";
+  }
+
   if(!file_exists('docs_himno/'.$nombre)){
     $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('inscribe.docx');
     $templateProcessor->setValue('apellido1', $_POST["apellido1"]);
@@ -140,6 +162,44 @@ if(isset($_POST["nombre"])){
     $templateProcessor->setValue('apellido1pa', $_POST["apellido1pa"]);
     $templateProcessor->setValue('apellido2pa',$_POST["apellido2pa"]);
     $templateProcessor->setValue('nombrepa', $_POST["nombrepa"]);
+
+    // Variables de plantilla para el segundo tutor
+    $templateProcessor->setValue('parentescopa2',$_POST["parentescopa2"]);
+    $templateProcessor->setValue('diapa2',$dianacpa2);
+    $templateProcessor->setValue('mespa2',$mesnacpa2);
+    $templateProcessor->setValue('aniopa2',$anionacpa2);
+    $templateProcessor->setValue('edadpa2',$edadpa2);
+    $templateProcessor->setValue('edadmespa2',$edadmespa2);
+    $templateProcessor->setValue('sexopa2',$_POST["sexopa2"]);
+    $templateProcessor->setValue('curppa2',$_POST["curppa2"]);
+    $templateProcessor->setValue('civilpa2',$_POST["civilpa2"]);
+    $templateProcessor->setValue('estudiospa2',$_POST["estudiospa2"]);
+    $templateProcessor->setValue('laboralpa2',$_POST["laboralpa2"]);
+    $templateProcessor->setValue('nacionalidadpa2',$_POST["nacionalidadpa2"]);
+    $templateProcessor->setValue('entidadnacpa2',$_POST["entidadnacpa2"]);
+    $templateProcessor->setValue('documentopa2',$_POST["documentopa2"]);
+    $templateProcessor->setValue('callepa2',$_POST["callepa2"]);
+    $templateProcessor->setValue('calle1pa2',$_POST["calle1pa2"]);
+    $templateProcessor->setValue('calle2pa2',$_POST["calle2pa2"]);
+    $templateProcessor->setValue('numextpa2',$_POST["numextpa2"]);
+    $templateProcessor->setValue('numintpa2',$_POST["numintpa2"]);
+    $templateProcessor->setValue('manzanapa2',$_POST["manzanapa2"]);
+    $templateProcessor->setValue('lotepa2',$_POST["lotepa2"]);
+    $templateProcessor->setValue('deptopa2',$_POST["deptopa2"]);
+    $templateProcessor->setValue('coloniapa2',$_POST["coloniapa2"]);
+    $templateProcessor->setValue('cppa2',$_POST["cppa2"]);
+    $templateProcessor->setValue('localidadpa2',$_POST["localidadpa2"]);
+    $templateProcessor->setValue('municipiopa2',$_POST["municipiopa2"]);
+    $templateProcessor->setValue('referenciapa2',$_POST["referenciapa2"]);
+    $templateProcessor->setValue('entidadpa2',$_POST["entidadpa2"]);
+    $templateProcessor->setValue('telcasapa2',$_POST["telcasapa2"]);
+    $templateProcessor->setValue('telcelpa2',$_POST["telcelpa2"]);
+    $templateProcessor->setValue('correo1pa2',$_POST["correo1pa2"]);
+    $templateProcessor->setValue('correo2pa2',$_POST["correo2pa2"]);
+    $templateProcessor->setValue('apellido1pa2', $_POST["apellido1pa2"]);
+    $templateProcessor->setValue('apellido2pa2',$_POST["apellido2pa2"]);
+    $templateProcessor->setValue('nombrepa2', $_POST["nombrepa2"]);
+
     $templateProcessor->setValue('especial', $_POST["especial"]);
     $templateProcessor->setValue('apoyo',$_POST["apoyo"]);
     $templateProcessor->setValue('indigena', $_POST["indigena"]);    
@@ -167,8 +227,8 @@ if(isset($_POST["nombre"])){
       die("Conexión fallida: " . $conn->connect_error);
   }
 
-  $query = "INSERT INTO ins_himno (apellido1, apellido2, nombre, dia, mes, anio, edad, edadmes, sexo, curp, peso, talla, lentes, zapatos, cartilla, vacunas, nacionalidad, entidadnac, serviciomed, calle, entrecalle1, entrecalle2, numext, numint, manzana, lote, depto, colonia, cp, localidad, municipio, referencia, entidad, telcasa, telcel, correo1, correo2, hermanos, redsocial, tipored, gradoherm, grupoherm, parentesco, apellido1herm, apellido2herm, nombreherm, diapa, mespa, aniopa, edadpa, edadmespa, sexopa, curppa, civil, estudios, laboral, nacionalidadpa, entidadnacpa, documento, callepa, calle1pa, calle2pa, numextpa, numintpa, manzanapa, lotepa, deptopa, coloniapa, cppa, localidadpa, municipiopa, referenciapa, entidadpa, telcasapa, telcelpa, correo1pa, correo2pa, apellido1pa, apellido2pa, nombrepa, especial, apoyo, indigena,grado,grupo) 
-  VALUES ('".$_POST["apellido1"]."','".$_POST["apellido2"]."','".$_POST["nombre"]."',".$dianac.",".$mesnac.",".$anionac.",".$edad.",".$edadmes.",'".$_POST["sexo"]."','".$_POST["curp"]."','".$_POST["peso"]."','".$_POST["talla"]."','".$_POST["lentes"]."','".$_POST["zapatos"]."','".$_POST["cartilla"]."','".$_POST["vacunas"]."','".$_POST["nacionalidad"]."','".$_POST["entidadnac"]."','".$_POST["serviciomed"]."','".$_POST["calle"]."','".$_POST["entrecalle1"]."','".$_POST["entrecalle2"]."','".$_POST["numext"]."','".$_POST["numint"]."','".$_POST["manzana"]."','".$_POST["lote"]."','".$_POST["depto"]."','".$_POST["colonia"]."','".$_POST["cp"]."','".$_POST["localidad"]."','".$_POST["municipio"]."','".$_POST["referencia"]."','".$_POST["entidad"]."','".$_POST["telcasa"]."','".$_POST["telcel"]."','".$_POST["correo1"]."','".$_POST["correo2"]."','".$_POST["hermanos"]."','".$_POST["redsocial"]."','".$_POST["tipored"]."','".$_POST["gradoherm"]."','".$_POST["grupoherm"]."','".$_POST["parentesco"]."','".$_POST["apellido1herm"]."','".$_POST["apellido2herm"]."','".$_POST["nombreherm"]."',".$dianacpa.",".$mesnacpa.",".$anionacpa.",".$edadpa.",".$edadmespa.",'".$_POST["sexopa"]."','".$_POST["curppa"]."','".$_POST["civil"]."','".$_POST["estudios"]."','".$_POST["laboral"]."','".$_POST["nacionalidadpa"]."','".$_POST["entidadnacpa"]."','".$_POST["documento"]."','".$_POST["callepa"]."','".$_POST["calle1pa"]."','".$_POST["calle2pa"]."','".$_POST["numextpa"]."','".$_POST["numintpa"]."','".$_POST["manzanapa"]."','".$_POST["lotepa"]."','".$_POST["deptopa"]."','".$_POST["coloniapa"]."','".$_POST["cppa"]."','".$_POST["localidadpa"]."','".$_POST["municipiopa"]."','".$_POST["referenciapa"]."','".$_POST["entidadpa"]."','".$_POST["telcasapa"]."','".$_POST["telcelpa"]."','".$_POST["correo1pa"]."','".$_POST["correo2pa"]."','".$_POST["apellido1pa"]."','".$_POST["apellido2pa"]."','".$_POST["nombrepa"]."','".$_POST["especial"]."','".$_POST["apoyo"]."','".$_POST["indigena"]."','".$_POST["grado"]."','".$_POST["grupo"]."')";
+  $query = "INSERT INTO ins_himno (apellido1, apellido2, nombre, dia, mes, anio, edad, edadmes, sexo, curp, peso, talla, lentes, zapatos, cartilla, vacunas, nacionalidad, entidadnac, serviciomed, calle, entrecalle1, entrecalle2, numext, numint, manzana, lote, depto, colonia, cp, localidad, municipio, referencia, entidad, telcasa, telcel, correo1, correo2, hermanos, redsocial, tipored, gradoherm, grupoherm, parentesco, apellido1herm, apellido2herm, nombreherm, diapa, mespa, aniopa, edadpa, edadmespa, sexopa, curppa, civil, estudios, laboral, nacionalidadpa, entidadnacpa, documento, callepa, calle1pa, calle2pa, numextpa, numintpa, manzanapa, lotepa, deptopa, coloniapa, cppa, localidadpa, municipiopa, referenciapa, entidadpa, telcasapa, telcelpa, correo1pa, correo2pa, apellido1pa, apellido2pa, nombrepa, especial, apoyo, indigena, grado, grupo, parentescopa2, apellido1pa2, apellido2pa2, nombrepa2, diapa2, mespa2, aniopa2, edadpa2, edadmespa2, sexopa2, curppa2, civilpa2, estudiospa2, laboralpa2, nacionalidadpa2, entidadnacpa2, documentopa2, callepa2, calle1pa2, calle2pa2, numextpa2, numintpa2, manzanapa2, lotepa2, deptopa2, coloniapa2, cppa2, localidadpa2, municipiopa2, referenciapa2, entidadpa2, telcasapa2, telcelpa2, correo1pa2, correo2pa2) 
+  VALUES ('".$_POST["apellido1"]."','".$_POST["apellido2"]."','".$_POST["nombre"]."',".$dianac.",".$mesnac.",".$anionac.",".$edad.",".$edadmes.",'".$_POST["sexo"]."','".$_POST["curp"]."','".$_POST["peso"]."','".$_POST["talla"]."','".$_POST["lentes"]."','".$_POST["zapatos"]."','".$_POST["cartilla"]."','".$_POST["vacunas"]."','".$_POST["nacionalidad"]."','".$_POST["entidadnac"]."','".$_POST["serviciomed"]."','".$_POST["calle"]."','".$_POST["entrecalle1"]."','".$_POST["entrecalle2"]."','".$_POST["numext"]."','".$_POST["numint"]."','".$_POST["manzana"]."','".$_POST["lote"]."','".$_POST["depto"]."','".$_POST["colonia"]."','".$_POST["cp"]."','".$_POST["localidad"]."','".$_POST["municipio"]."','".$_POST["referencia"]."','".$_POST["entidad"]."','".$_POST["telcasa"]."','".$_POST["telcel"]."','".$_POST["correo1"]."','".$_POST["correo2"]."','".$_POST["hermanos"]."','".$_POST["redsocial"]."','".$_POST["tipored"]."','".$_POST["gradoherm"]."','".$_POST["grupoherm"]."','".$_POST["parentesco"]."','".$_POST["apellido1herm"]."','".$_POST["apellido2herm"]."','".$_POST["nombreherm"]."',".$dianacpa.",".$mesnacpa.",".$anionacpa.",".$edadpa.",".$edadmespa.",'".$_POST["sexopa"]."','".$_POST["curppa"]."','".$_POST["civil"]."','".$_POST["estudios"]."','".$_POST["laboral"]."','".$_POST["nacionalidadpa"]."','".$_POST["entidadnacpa"]."','".$_POST["documento"]."','".$_POST["callepa"]."','".$_POST["calle1pa"]."','".$_POST["calle2pa"]."','".$_POST["numextpa"]."','".$_POST["numintpa"]."','".$_POST["manzanapa"]."','".$_POST["lotepa"]."','".$_POST["deptopa"]."','".$_POST["coloniapa"]."','".$_POST["cppa"]."','".$_POST["localidadpa"]."','".$_POST["municipiopa"]."','".$_POST["referenciapa"]."','".$_POST["entidadpa"]."','".$_POST["telcasapa"]."','".$_POST["telcelpa"]."','".$_POST["correo1pa"]."','".$_POST["correo2pa"]."','".$_POST["apellido1pa"]."','".$_POST["apellido2pa"]."','".$_POST["nombrepa"]."','".$_POST["especial"]."','".$_POST["apoyo"]."','".$_POST["indigena"]."','".$_POST["grado"]."','".$_POST["grupo"]."','".$_POST["parentescopa2"]."','".$_POST["apellido1pa2"]."','".$_POST["apellido2pa2"]."','".$_POST["nombrepa2"]."',".$dianacpa2.",".$mesnacpa2.",".$anionacpa2.",".$edadpa2.",".$edadmespa2.",'".$_POST["sexopa2"]."','".$_POST["curppa2"]."','".$_POST["civilpa2"]."','".$_POST["estudiospa2"]."','".$_POST["laboralpa2"]."','".$_POST["nacionalidadpa2"]."','".$_POST["entidadnacpa2"]."','".$_POST["documentopa2"]."','".$_POST["callepa2"]."','".$_POST["calle1pa2"]."','".$_POST["calle2pa2"]."','".$_POST["numextpa2"]."','".$_POST["numintpa2"]."','".$_POST["manzanapa2"]."','".$_POST["lotepa2"]."','".$_POST["deptopa2"]."','".$_POST["coloniapa2"]."','".$_POST["cppa2"]."','".$_POST["localidadpa2"]."','".$_POST["municipiopa2"]."','".$_POST["referenciapa2"]."','".$_POST["entidadpa2"]."','".$_POST["telcasapa2"]."','".$_POST["telcelpa2"]."','".$_POST["correo1pa2"]."','".$_POST["correo2pa2"]."')";
   
   if ($conn->query($query) === TRUE) {
       echo "Datos guardados correctamente.";
@@ -229,14 +289,17 @@ if(isset($_POST["nombre"])){
         var fieldName = inputs[i].getAttribute('name');
         if (fieldName !== 'lote' && fieldName !== 'manzana' && fieldName !== 'depto' && fieldName !== 'numint' 
         && fieldName !== 'lotepa' && fieldName !== 'manzanapa' && fieldName !== 'deptopa' && fieldName !== 'numintpa' 
+        && fieldName !== 'lotepa2' && fieldName !== 'manzanapa2' && fieldName !== 'deptopa2' && fieldName !== 'numintpa2'
         && fieldName !== 'gradoherm' && fieldName !== 'grupoherm'
     && fieldName !== 'apellido1herm' && fieldName !== 'apellido2herm'
     && fieldName !== 'redsocial' && fieldName !== 'tiporeded'
-    && fieldName !== 'correo2' && fieldName !== 'correo2pa'
+    && fieldName !== 'correo2' && fieldName !== 'correo2pa' && fieldName !== 'correo2pa2'
     && fieldName !== 'localidad' && fieldName !== 'entidad'
     && fieldName !== 'localidadpa' && fieldName !== 'entidadpa'
+    && fieldName !== 'localidadpa2' && fieldName !== 'entidadpa2'
     && fieldName !== 'telcasa' && fieldName !== 'telcel'
     && fieldName !== 'telcasapa' && fieldName !== 'telcelpa'
+    && fieldName !== 'telcasapa2' && fieldName !== 'telcelpa2'
     && fieldName !== 'nombreherm' && fieldName !== 'apellido2herm' ) {
           if (inputs[i].value === '') {
             filled = false;
@@ -481,13 +544,14 @@ if(isset($_POST["nombre"])){
   <div class="col-md-2">
     <div class="form-group">
                     <label class="form-control-label" for="serviciomed">TIPO DE SERVICIO MEDICO</label>
-                    <select class="form-control" name="serviciomed" id="serviciomed">
-                      <option>IMSS</option>
-                      <option>ISSSTE</option>
-                      <option>ISEM</option>
-                      <option>PARTICULAR</option>
-
-                    </select>
+                    <input class="form-control" name="serviciomed" id="serviciomed" list="servicios_medicos" placeholder="TIPO DE SERVICIO MEDICO" type="text">
+                    <datalist id="servicios_medicos">
+                      <option value="IMSS">
+                      <option value="ISSSTE">
+                      <option value="ISSEMYM">
+                      <option value="ISEM">
+                      <option value="PARTICULAR">
+                    </datalist>
     </div>
 
   </div>
@@ -778,7 +842,7 @@ if(isset($_POST["nombre"])){
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                           </div>
-                          <input class="form-control" name="correo2" placeholder="EMAIL NUEVO ESCUELA.MX" type="text">
+                          <input class="form-control" name="correo2" placeholder="EMAIL NUEVAESCUELA.MX" type="text">
                         </div>
                       </div>
                     </div>
@@ -1269,13 +1333,400 @@ if(isset($_POST["nombre"])){
 </div><!-- fin de row calle-->
 
 </div><!-- fin card body -->
-<div class="col-lg-6 col-5 text-right">
-              <input type="submit" value="Guardar">
-              
-            </div>
+</div><!-- fin card header -->
+
+            <!-- DATOS DE LA SEGUNDA PERSONA RESPONSABLE DEL ALUMNO (A): -->
+            <div class="card">
+              <!-- Card header -->
+              <div class="card-header">
+                <h3 class="mb-0">DATOS DE LA SEGUNDA PERSONA RESPONSABLE DEL ALUMNO (A): </h3>
+              </div>
+              <!-- Card body -->
+              <div class="card-body">
+                
+
+                  <!-- SEGUNDO TUTOR -->
+                  <!-- PA2 -->
+                  <div class="row">
+
+                  <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="parentescopa2" placeholder="PARENTESCO" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="apellido1pa2" placeholder="PRIMER APELLIDO" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="apellido2pa2" placeholder="SEGUNDO APELLIDO" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="nombrepa2" placeholder="NOMBRE(S)" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-2">
+                    <div class="form-group">
+                        <!--label class="form-control-label" for="exampleDatepicker">FECHA DE NACIMIENTO</label-->
+                        <input class="form-control datepicker" name="fechanacpa2" placeholder="FECHA DE NACIMIENTO" type="text">
+                      </div>
+                    </div>
+
+                    <div class="col-md-1">
+
+                    <div class="custom-control custom-radio mb-3">
+                        <input name="sexopa2" value="H" class="custom-control-input" id="customRadio9" type="radio">
+                        <label class="custom-control-label" for="customRadio9">Hombre</label>
+                      </div>
+                      <div class="custom-control custom-radio mb-3">
+                        <input name="sexopa2" value="M" class="custom-control-input" id="customRadio10" type="radio">
+                        <label class="custom-control-label" for="customRadio10">Mujer</label>
+                      </div>
+
+                    </div>
+
+                    <div class="col-md-1">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="curppa2" placeholder="CURP" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div><!-- fin de row-->
+
+                  <div class="row"><!-- civil -->
+
+                  <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="civilpa2" placeholder=" ESTADO CIVIL" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="estudiospa2" placeholder="GRADO MÁXIMO DE ESTUDIOS" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="laboralpa2" placeholder="SITUACIÓN LABORAL (con / sin empleo) " type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="nacionalidadpa2" placeholder="NACIONALIDAD" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="entidadnacpa2" placeholder="ENTIDAD DE NACIMIENTO" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="documentopa2" placeholder="TIPO DE DOCUMENTO OFICIAL" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div><!-- fin de row civil-->
+
+                  <div class="row"><!--calle-->
+
+                  <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="callepa2" placeholder="CALLE" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="calle1pa2" placeholder="ENTRE LA CALLE" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="calle2pa2" placeholder="Y LA CALLE" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="coloniapa2" placeholder="COLONIA" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="municipiopa2" placeholder="MUNICIPIO" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="localidadpa2" placeholder="LOCALIDAD" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div><!-- fin de row -->
+                  <div class="row">
+
+<div class="col-md-1">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+
+        <input class="form-control" name="numextpa2" placeholder="#Ext." type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-1">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+
+        <input class="form-control" name="numintpa2" placeholder="#Int." type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-1">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+
+        <input class="form-control" name="manzanapa2" placeholder="Manzana" type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-1">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+
+        <input class="form-control" name="lotepa2" placeholder="Lote" type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-1">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+
+        <input class="form-control" name="deptopa2" placeholder="Depto" type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-1">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+
+        <!--input class="form-control" name="talla" placeholder="TALLA" type="text"-->
+      </div>
+    </div>
+  </div>
+
+<div class="col-md-2">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="cppa2" placeholder="CODIGO POSTAL" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input class="form-control" name="referenciapa2" placeholder="OTRA REFERENCIA  (Escuela, Iglesia, Tienda etc.)" type="text">
+                        </div>
+                      </div>
+                    </div>
+
+</div><!-- fin de row -->
+
+<div class="row"><!--entidad y correos-->
+
+<div class="col-md-2">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-user"></i></span>
+        </div>
+        <input class="form-control" name="entidadpa2" placeholder="ENTIDAD" type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-1">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-user"></i></span>
+        </div>
+        <input class="form-control" name="telcasapa2" placeholder="TEL CASA" type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-1">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-user"></i></span>
+        </div>
+        <input class="form-control" name="telcelpa2" placeholder="TEL CELULAR" type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <div class="form-group">
+
+      <div class="input-group input-group-merge">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-user"></i></span>
+        </div>
+        <input class="form-control" name="correo1pa2" placeholder="EMAIL PRINCIPAL" type="text">
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <div class="form-group">
+      <div class="input-group input-group-merge">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><i class="fas fa-user"></i></span>
+        </div>
+        <input class="form-control" name="correo2pa2" placeholder="EMAIL ALTERNO" type="text">
+      </div>
+    </div>
+  </div>
+
+</div><!-- fin de row calle-->
+
+</div><!-- fin card body -->
 </div><!-- fin card header -->
 
 </div>          
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card-wrapper">
+              <div class="col-lg-6 col-5 text-right">
+                <input type="submit" value="Guardar">
+              </div>
+            </div>
           </div>
         </div>
       </div>
