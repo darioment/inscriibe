@@ -583,6 +583,8 @@ if(isset($_POST["nombre"])){
                     <option>H</option>
                     <option>I</option>  
                     <option>J</option>
+                    <option>K</option>
+                    <option>L</option>
 
 
                     </select>
